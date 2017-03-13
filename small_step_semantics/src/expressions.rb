@@ -4,6 +4,7 @@ module Inspectable
   end
 end
 
+
 class Number < Struct.new(:value)
   include Inspectable
 
@@ -15,6 +16,7 @@ class Number < Struct.new(:value)
     false
   end
 end
+
 
 class Add < Struct.new(:left, :right)
   include Inspectable
@@ -38,6 +40,7 @@ class Add < Struct.new(:left, :right)
   end
 end
 
+
 class Multiply < Struct.new(:left, :right)
   include Inspectable
 
@@ -60,6 +63,43 @@ class Multiply < Struct.new(:left, :right)
     end
   end
 end
+
+
+class Boolean < Struct.new(:value)
+  include Inspectable
+
+  def to_s
+    value.to_s
+  end
+
+  def reducible?
+    false
+  end
+end
+
+
+class LessThan < Struct.new(:left, :right)
+  include Inspectable
+
+  def to_s
+    "#{left} < #{right}"
+  end
+
+  def reducible?
+    true
+  end
+
+  def reduce
+    if left.reducible?
+      LessThan.new(left.reduce, right)
+    elsif right.reducible?
+      LessThan.new(left, right.reduce)
+    else
+      Boolean.new(left.value < right.value)
+    end
+  end
+end
+
 
 class Machine < Struct.new(:expression)
 
