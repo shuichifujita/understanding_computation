@@ -101,6 +101,19 @@ class LessThan < Struct.new(:left, :right)
 end
 
 
+class Variable < Struct.new(:name)
+  include Inspectable
+
+  def to_s
+    name.to_s
+  end
+
+  def reducible?
+    true
+  end
+end
+
+
 class Machine < Struct.new(:expression)
 
   def step
