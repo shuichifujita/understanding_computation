@@ -55,3 +55,15 @@ Machine.new(
   { x: Number.new(3), y: Number.new(4) } # environment
 ).run
 ```
+
+## p.31 代入
+
+```ruby
+statement = Assign.new(:x, Multiply.new(Number.new(3), Number.new(4)))
+environment = { x: Number.new(2) }
+
+statement, environment = statement.reduce(environment)
+```
+
+```
+
