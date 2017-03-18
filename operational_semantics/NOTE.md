@@ -65,5 +65,20 @@ environment = { x: Number.new(2) }
 statement, environment = statement.reduce(environment)
 ```
 
+## p.34 文の扱える仮想機械
+
+```ruby
+# 現在の機械の削除
+Object.send(:remove_const, :Machine)
+
+# 新たな機会の作成はexpressionsから
+# 実装後、仮想機械を使う
+Machine.new(
+  Assign.new(
+    :x,
+    Add.new(Variable.new(:x), Number.new(1))
+  ),
+  { x: Number.new(2) }
+).run
 ```
 
