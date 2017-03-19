@@ -82,3 +82,23 @@ Machine.new(
 ).run
 ```
 
+## p.35 If/If(else節なし)のスニペット
+
+```ruby
+Machine.new(
+  If.new(
+    Variable.new(:x),
+    Assign.new(:y, Number.new(1)),
+    Assign.new(:y, Number.new(2))
+  ),
+  { x: Boolean.new(true) }
+).run
+```
+
+```ruby
+Machine.new(
+  If.new(Variable.new(:x), Assign.new(:y, Number.new(1)), DoNothing.new),
+  { x: Boolean.new(false) }
+).run
+```
+
