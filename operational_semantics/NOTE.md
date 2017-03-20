@@ -139,5 +139,27 @@ LessThan.new(
 ).evaluate({ x: Number.new(2), y: Number.new(3) })
 ```
 
+### 文 (シーケンス)
+
+```ruby
+statement =
+Sequence.new(
+  Assign.new(:x, Add.new(Number.new(1), Number.new(1))),
+  Assign.new(:y, Add.new(Variable.new(:x), Number.new(3)))
+)
+
+statement.evaluate({})
+```
+
+### 文 (While)
+
+```ruby
+statement =
+While.new(
+  LessThan.new(Variable.new(:x), Number.new(5)),
+  Assign.new(:x, Multiply.new(Variable.new(:x), Number.new(3)))
+)
+
+statement.evaluate({ x: Number.new(1) })
 ```
 
