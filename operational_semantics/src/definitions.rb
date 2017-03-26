@@ -234,6 +234,36 @@ class Sequence < Struct.new(:first, :second)
   end
 end
 
+class While < Struct.new(:condition, :body)
+  include Inspectable
+
+  def to_s
+    "while (#{condition}) { #{body} }"
+  end
+
+  def reducible?
+    true
+  end
+
+  ### [ While ] statement the reduction rule ###################################
+  ### * Reduce
+  ###     «while (condition) { body }»
+  ###   to
+  ###     «if (condition) { body; while (condition) { body } } else { do-nothing }»
+  ###   and an unchanged environment.
+  ##############################################################################
+
+  def reduce(environment)
+    [
+      If.new(condition,
+        Sequence.new(body, self),
+        DoNothing.new
+      ),
+      environment
+    ]
+  end
+end
+
 class Machine < Struct.new(:statement, :environment)
   def step
     self.statement, self.environment = statement.reduce(environment)
