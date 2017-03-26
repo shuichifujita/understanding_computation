@@ -56,9 +56,17 @@ Machine.new(
 ).run
 ```
 
-# p.34 Assignの挙動確認
+## p.34 Assignの挙動確認
 
 ```Ruby
 statement = Assign.new(:x, Add.new(Variable.new(:x), Number.new(1)))
 environment = { x: Number.new(2) }
+```
+
+## p.35 文の扱えるMachine
+```Ruby
+Machine.new(
+  Assign.new(:x, Add.new(Variable.new(:x), Number.new(1))),
+  { x: Number.new(2) }
+).run
 ```
