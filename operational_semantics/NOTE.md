@@ -102,3 +102,23 @@ Machine.new(
 # if (false) { y = 1 } else { do-nothing }, {:x=>«false»} do-nothing, {:x=>«false»}
 # => nil
 ```
+
+## p.37 Sequence
+```Ruby
+Machine.new(
+  Sequence.new(
+    Assign.new(:x, Add.new(Number.new(1), Number.new(1))),
+    Assign.new(:y, Add.new(Variable.new(:x), Number.new(3)))
+  ),
+  {}
+).run
+
+# x = 1 + 1; y = x + 3, {}
+# x = 2; y = x + 3, {}
+# do-nothing; y = x + 3, {:x=><<2>>}
+# y = x + 3, {:x=><<2>>}
+# y = 2 + 3, {:x=><<2>>}
+# y = 5, {:x=><<2>>}
+# do-nothing, {:x=><<2>>, :y=><<5>>}
+# => nil
+```

@@ -203,6 +203,37 @@ class If < Struct.new(:condition, :consequence, :alternative)
   end
 end
 
+class Sequence < Struct.new(:first, :second)
+  include Inspectable
+
+  def to_s
+    "#{first}; #{second}"
+  end
+
+  def reducible?
+    true
+  end
+
+  ### [ Sequence ] statement the reduction rule ################################
+  ### * If the first statement is a <<do-nothing>> statement,
+  ###   reduce to the second statement ant the original environment.
+  ###
+  ### * If the first statement is not <<do-nothing>>, then reduce it,
+  ###   resulting in a new sequence
+  ###   (the reduced first statement followed by the scond statement)
+  ###   and a reduced environment.
+  ##############################################################################
+  def reduce(environment)
+    case first
+    when DoNothing.new
+      [second, environment]
+    else
+      reduced_first, reduced_environment = first.reduce(environment)
+      [Sequence.new(reduced_first, second), reduced_environment]
+    end
+  end
+end
+
 class Machine < Struct.new(:statement, :environment)
   def step
     self.statement, self.environment = statement.reduce(environment)
