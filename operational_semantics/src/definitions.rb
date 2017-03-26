@@ -117,6 +117,26 @@ class Variable < Struct.new(:name)
   end
 end
 
+class DoNothing
+  include Inspectable
+
+  def to_s
+    'do-nothing'
+  end
+
+  # We want to be able to compare any two statements to see if
+  # they're equal. the other syntax classes inherit
+  # an implemantation of #== from Struct,
+  # but DoNothing has not the method because of DoNothing does'nt
+  # have any attributes.
+  def==(other_statement)
+    other_statement.instance_of? DoNothing
+  end
+
+  def reducible?
+    false
+  end
+end
 
 class Machine < Struct.new(:expression, :environment)
 
