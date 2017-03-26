@@ -69,4 +69,36 @@ Machine.new(
   Assign.new(:x, Add.new(Variable.new(:x), Number.new(1))),
   { x: Number.new(2) }
 ).run
+
+# if (x) { y = 1 } else { y = 2 }, {:x=>«true»}
+# if (true) { y = 1 } else { y = 2 }, {:x=>«true»} y = 1, {:x=>«true»}
+# do-nothing, {:x=>«true», :y=>«1»}
+# => nil
+```
+
+## p.36 Ifの実行
+```Ruby
+Machine.new(
+  If.new(Variable.new(:x),
+    Assign.new(:y, Number.new(1)),
+    Assign.new(:y, Number.new(2))
+  ),
+  { x: Boolean.new(true) }
+).run
+```
+
+`else` 節のないようなパターン
+
+```Ruby
+Machine.new(
+  If.new(Variable.new(:x),
+    Assign.new(:y, Number.new(1)),
+    DoNothing.new
+  ),
+  { x: Boolean.new(false) }
+).run
+
+# if (x) { y = 1 } else { do-nothing }, {:x=>«false»}
+# if (false) { y = 1 } else { do-nothing }, {:x=>«false»} do-nothing, {:x=>«false»}
+# => nil
 ```

@@ -168,6 +168,41 @@ class Assign < Struct.new(:name, :expression)
   end
 end
 
+class If < Struct.new(:condition, :consequence, :alternative)
+  include Inspectable
+
+  def to_s
+    "if (#{condition}) { #{consequence} } else { #{alternative} }"
+  end
+
+  def reducible?
+    true
+  end
+
+  ### [ IF ] statement the reduction rule ######################################
+  # * If the condition can be reduced, then reduce it,
+  #   resulting in a reduced conditional statement and an unchanged environment.
+  #
+  # * If the condition is the expression «true»,
+  #   reduce to the consequence statement and an unchanged environment.
+  #
+  # * If the condition is the expression «false»,
+  #   reduce to the alternative statement and an unchanged environment.
+  ##############################################################################
+  def reduce(environment)
+    if condition.reducible?
+      [If.new(condition.reduce(environment), consequence, alternative), environment]
+    else
+      case condition
+      when Boolean.new(true)
+        [consequence, environment]
+      when Boolean.new(false)
+        [alternative, environment]
+      end
+    end
+  end
+end
+
 class Machine < Struct.new(:statement, :environment)
   def step
     self.statement, self.environment = statement.reduce(environment)
