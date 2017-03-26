@@ -138,6 +138,36 @@ class DoNothing
   end
 end
 
+class Assign < Struct.new(:name, :expression)
+  include Inspectable
+
+  def to_s
+    "#{name} = #{expression}"
+  end
+
+  def reducible?
+    true
+  end
+
+  ### [ ASSIGN ] statement the reduction rule ##################################
+  # * If the assignment’s expression can be reduced,
+  #   then reduce it, resulting in a reduced assignment statement
+  #   and an unchanged environment.
+  #
+  # * If the assignment’s expression can’t be reduced,
+  #   then update the environment to associate that
+  #   expression with the assignment’s variable,
+  #   resulting in a «do-nothing» statement and a new environment.
+  ##############################################################################
+  def reduce(environment)
+    if expression.reducible?
+      [Assign.new(name, expression.reduce(environment)), environment]
+    else
+      [DoNothing.new, environment.merge({ name => expression })]
+    end
+  end
+end
+
 class Machine < Struct.new(:expression, :environment)
 
   def step

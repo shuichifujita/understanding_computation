@@ -55,3 +55,10 @@ Machine.new(
   { x: Number.new(3), y: Number.new(4) } # environment
 ).run
 ```
+
+# p.34 Assignの挙動確認
+
+```Ruby
+statement = Assign.new(:x, Add.new(Variable.new(:x), Number.new(1)))
+environment = { x: Number.new(2) }
+```
