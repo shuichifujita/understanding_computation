@@ -100,6 +100,34 @@ class LessThan < Struct.new(:left, :right)
   end
 end
 
+class And < Struct.new(:left, :right)
+  include Inspectable
+
+  def to_s
+    "#{left} and #{right}"
+  end
+
+  def reducible?
+    true
+  end
+
+  #
+  def reduce(environment)
+    if left.reducible?
+      And.new(left.reduce(environment), right)
+    else
+      if right.reducible?
+        And.new(left, right.reduce(environment))
+      else
+        if ( left == Boolean.new(true) ) && ( right == Boolean.new(true) )
+          Boolean.new(true)
+        else
+          Boolean.new(false)
+        end
+      end
+    end
+  end
+end
 
 class Variable < Struct.new(:name)
   include Inspectable
