@@ -129,6 +129,36 @@ class And < Struct.new(:left, :right)
   end
 end
 
+class Or < Struct.new(:left, :right)
+  include Inspectable
+
+  def to_s
+    "#{left} or #{right}"
+  end
+
+  def reducible?
+    true
+  end
+
+  #
+  def reduce(environment)
+    if left.reducible?
+      Or.new(left.reduce(environment), right)
+    else
+      if right.reducible?
+        Or.new(left, right.reduce(environment))
+      else
+        if ( left == Boolean.new(true) ) || ( right == Boolean.new(true) )
+          Boolean.new(true)
+        else
+          Boolean.new(false)
+        end
+      end
+    end
+  end
+end
+
+
 class Variable < Struct.new(:name)
   include Inspectable
 
