@@ -42,3 +42,28 @@ class LessThan
     Boolean.new(left.evaluate(environment).value < right.evaluate(environment).value)
   end
 end
+
+# Statements
+
+class Assign # args = {:name, :expression}
+  def evaluate(environment)
+    environment.merge({ name => expression.evaluate(environment) })
+  end
+end
+
+class DoNothing
+  def evaluate(environment)
+    environment
+  end
+end
+
+class If # args = {:condition, :consequence, :alternative}
+  def evaluate(environment)
+    case condition.evaluate(environment)
+    when Boolean.new(true)
+      consequence.evaluate(environment)
+    when Boolean.new(false)
+      alternative.evaluate(environment)
+    end
+  end
+end
