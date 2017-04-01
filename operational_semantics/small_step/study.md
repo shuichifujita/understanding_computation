@@ -115,7 +115,7 @@ st = Sequence.new(
 
 実行結果
 ```Ruby
-# Machine.new(st, {}).run
+Machine.new(st, {}).run
 # => <<cnt = 1; x0 = 0; x1 = 1; while (cnt < 10) { x2 = x0 + x1; x0 = x1; x1 = x2; cnt = cnt + 1 }>>
 # irb(main):067:0> Machine.new(st, {}).run
 # cnt = 1; x0 = 0; x1 = 1; while (cnt < 10) { x2 = x0 + x1; x0 = x1; x1 = x2; cnt = cnt + 1 }, {}
