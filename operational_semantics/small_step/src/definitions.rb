@@ -1,16 +1,6 @@
-module Inspectable
-  def inspect
-    "<<#{self}>>"
-  end
-end
+require '../../../base_definitions.rb'
 
-
-class Number < Struct.new(:value)
-  include Inspectable
-
-  def to_s
-    value.to_s
-  end
+class Number
 
   def reducible?
     false
@@ -18,12 +8,7 @@ class Number < Struct.new(:value)
 end
 
 
-class Add < Struct.new(:left, :right)
-  include Inspectable
-
-  def to_s
-    "#{left} + #{right}"
-  end
+class Add
 
   def reducible?
     true
@@ -41,17 +26,11 @@ class Add < Struct.new(:left, :right)
 end
 
 
-class Multiply < Struct.new(:left, :right)
-  include Inspectable
-
-  def to_s
-    "#{left} * #{right}"
-  end
+class Multiply
 
   def reducible?
     true
   end
-
 
   def reduce(environment)
     if left.reducible?
@@ -65,12 +44,7 @@ class Multiply < Struct.new(:left, :right)
 end
 
 
-class Boolean < Struct.new(:value)
-  include Inspectable
-
-  def to_s
-    value.to_s
-  end
+class Boolean
 
   def reducible?
     false
@@ -78,12 +52,7 @@ class Boolean < Struct.new(:value)
 end
 
 
-class LessThan < Struct.new(:left, :right)
-  include Inspectable
-
-  def to_s
-    "#{left} < #{right}"
-  end
+class LessThan
 
   def reducible?
     true
@@ -100,12 +69,7 @@ class LessThan < Struct.new(:left, :right)
   end
 end
 
-class And < Struct.new(:left, :right)
-  include Inspectable
-
-  def to_s
-    "#{left} and #{right}"
-  end
+class And
 
   def reducible?
     true
@@ -129,12 +93,7 @@ class And < Struct.new(:left, :right)
   end
 end
 
-class Or < Struct.new(:left, :right)
-  include Inspectable
-
-  def to_s
-    "#{left} or #{right}"
-  end
+class Or
 
   def reducible?
     true
@@ -159,12 +118,7 @@ class Or < Struct.new(:left, :right)
 end
 
 
-class Variable < Struct.new(:name)
-  include Inspectable
-
-  def to_s
-    name.to_s
-  end
+class Variable
 
   def reducible?
     true
@@ -176,12 +130,6 @@ class Variable < Struct.new(:name)
 end
 
 class DoNothing
-  include Inspectable
-
-  def to_s
-    'do-nothing'
-  end
-
   # We want to be able to compare any two statements to see if
   # they're equal. the other syntax classes inherit
   # an implemantation of #== from Struct,
@@ -196,12 +144,7 @@ class DoNothing
   end
 end
 
-class Assign < Struct.new(:name, :expression)
-  include Inspectable
-
-  def to_s
-    "#{name} = #{expression}"
-  end
+class Assign
 
   def reducible?
     true
@@ -226,12 +169,7 @@ class Assign < Struct.new(:name, :expression)
   end
 end
 
-class If < Struct.new(:condition, :consequence, :alternative)
-  include Inspectable
-
-  def to_s
-    "if (#{condition}) { #{consequence} } else { #{alternative} }"
-  end
+class If
 
   def reducible?
     true
@@ -261,12 +199,7 @@ class If < Struct.new(:condition, :consequence, :alternative)
   end
 end
 
-class Sequence < Struct.new(:first, :second)
-  include Inspectable
-
-  def to_s
-    "#{first}; #{second}"
-  end
+class Sequence
 
   def reducible?
     true
@@ -292,12 +225,7 @@ class Sequence < Struct.new(:first, :second)
   end
 end
 
-class While < Struct.new(:condition, :body)
-  include Inspectable
-
-  def to_s
-    "while (#{condition}) { #{body} }"
-  end
+class While
 
   def reducible?
     true
@@ -322,7 +250,7 @@ class While < Struct.new(:condition, :body)
   end
 end
 
-class Machine < Struct.new(:statement, :environment)
+class Machine
   def step
     self.statement, self.environment = statement.reduce(environment)
   end
