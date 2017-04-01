@@ -13,3 +13,9 @@ class Boolean
     self
   end
 end
+
+class Variable # args = {:name}
+  def evaluate(environment)
+    environment[name]
+  end
+end
