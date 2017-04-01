@@ -26,3 +26,15 @@ statement = Sequence.new(
 statement.evaluate({})
 # => {:x=>«2», :y=>«5»}
 ```
+
+# p.45 Whileの挙動確認
+
+```Ruby
+statement = While.new(
+  LessThan.new(Variable.new(:x), Number.new(5)),
+  Assign.new(:x, Multiply.new(Variable.new(:x), Number.new(3)))
+)
+# => «while (x < 5) { x = x * 3 }»
+statement.evaluate({ x: Number.new(1) })
+# => {:x=>«9»}
+```

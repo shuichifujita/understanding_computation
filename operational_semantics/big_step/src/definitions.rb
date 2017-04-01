@@ -74,3 +74,29 @@ class Sequence # args = {:first, :second}
   end
 end
 
+class While # args = {:condition, :body}
+
+  ### While Behavior ###########################################################
+  # * Evaluate the condition to get either «true» or «false».
+  #
+  # * If the condition evaluates to «true»,
+  #   evaluate the body to get a new environment,
+  #   then repeat the loop within that new environment
+  #   (i.e., evaluate the whole «while» statement again)
+  #   and return the resulting environment.
+  #
+  # * If the condition evaluates to «false», return the environment unchanged.
+  #
+  ##############################################################################
+
+  def evaluate(environment)
+    case condition.evaluate(environment) # <- WATCH ENVRIONMENT AGAIN AND AGAIN, IN ANY LOOP TIME.
+    when Boolean.new(true)
+      evaluate(body.evaluate(environment))
+      #              ☝️ get the new envrionment
+      # ☝️ call self.evaluate (evaluate the whole «while» statement again)
+    when Boolean.new(false)
+      environment
+    end
+  end
+end
