@@ -67,3 +67,10 @@ class If # args = {:condition, :consequence, :alternative}
     end
   end
 end
+
+class Sequence # args = {:first, :second}
+  def evaluate(environment)
+    second.evaluate(first.evaluate(environment))
+  end
+end
+
