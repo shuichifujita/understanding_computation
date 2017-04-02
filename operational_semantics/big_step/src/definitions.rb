@@ -4,8 +4,10 @@ require '../../../base_definitions.rb'
 
 class Logger
   @stack = []
+  @debug = false
 
   def self.log(me, env)
+    return unless @debug
     puts "#evaluate at: #{me.class}, env: #{env}"
     @stack.push(me.class.name)
     puts @stack.join(':')
@@ -13,6 +15,11 @@ class Logger
 
   def self.clear
     @stack = []
+  end
+
+  def self.toggle_debug
+    self.clear
+    @debug = !@debug
   end
 end
 
